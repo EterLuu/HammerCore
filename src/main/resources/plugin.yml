@@ -1,0 +1,6 @@
+name: HammerCore
+version: '${version}'
+main: ink.ziip.hammer.hammercore.HammerCore
+api-version: '1.20'
+authors: [EterLzb]
+description: Core plugin of TrialHammer.
