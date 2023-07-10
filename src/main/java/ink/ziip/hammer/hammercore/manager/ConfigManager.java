@@ -33,6 +33,9 @@ public class ConfigManager extends BaseManager {
     public static Boolean UTIL_ARCHITECTURE_LORE_HIDDEN;
     public static List<String> UTIL_ARCHITECTURE_LORE_HIDDEN_CONTENT;
     public static Boolean UTIL_PEELING_RECOVERY;
+    public static Boolean UTIL_DISABLE_JOIN_MESSAGE;
+    public static Boolean UTIL_DISABLE_QUIT_MESSAGE;
+
     public static Boolean PROJECTKORRA_ALL_EARTH_BINDER;
 
     public ConfigManager() {
@@ -85,11 +88,13 @@ public class ConfigManager extends BaseManager {
         WORLD_PROTECTION_NO_CARTOGRAPHER = config.getBoolean("world-protection.no-cartographer", true);
         WORLD_PROTECTION_PREVENT_FARM_LAND_DESTROY = config.getBoolean("world-protection.prevent-farm-land-destroy", true);
 
-                FLOODGATE_HIDE_PARTICLES = config.getBoolean("floodgate.hide-particles", true);
+        FLOODGATE_HIDE_PARTICLES = config.getBoolean("floodgate.hide-particles", true);
 
         UTIL_ARCHITECTURE_LORE_HIDDEN = config.getBoolean("util.architecture-lore.hidden", true);
         UTIL_ARCHITECTURE_LORE_HIDDEN_CONTENT = config.getStringList("util.architecture-lore.content");
         UTIL_PEELING_RECOVERY = config.getBoolean("util.peeling-recovery", true);
+        UTIL_DISABLE_JOIN_MESSAGE = config.getBoolean("util.disable-join-message", true);
+        UTIL_DISABLE_QUIT_MESSAGE = config.getBoolean("util.disable-quit-message", true);
 
         PROJECTKORRA_ALL_EARTH_BINDER = config.getBoolean("projectkorra.all-earth-binder", false);
     }

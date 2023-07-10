@@ -95,6 +95,8 @@ util:
       - "特供建材"
   # 去皮右键复原
   peeling-recovery: true
+  disable-join-message: true
+  disable-quit-message: true
 
 projectkorra:
   all-earth-binder: false

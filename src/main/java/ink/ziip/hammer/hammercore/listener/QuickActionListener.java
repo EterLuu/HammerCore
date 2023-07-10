@@ -1,13 +1,12 @@
 package ink.ziip.hammer.hammercore.listener;
 
 import ink.ziip.hammer.hammercore.api.listener.BaseListener;
+import ink.ziip.hammer.hammercore.manager.ConfigManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.*;
 
 public class QuickActionListener extends BaseListener {
 
@@ -46,5 +45,17 @@ public class QuickActionListener extends BaseListener {
         }
         Player player = event.getPlayer();
         player.performCommand("dm open main_menu");
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if (ConfigManager.UTIL_DISABLE_JOIN_MESSAGE)
+            event.setJoinMessage(null);
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        if (ConfigManager.UTIL_DISABLE_QUIT_MESSAGE)
+            event.setQuitMessage(null);
     }
 }
