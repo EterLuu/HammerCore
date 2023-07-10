@@ -15,10 +15,52 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven {
+        name = "dmulloy2"
+        url = "https://repo.dmulloy2.net/repository/public/"
+    }
+    maven {
+        name = "jitpack"
+        url = "https://jitpack.io"
+    }
+    maven {
+        name = "opencollabRepositoryMavenSnapshots"
+        url = "https://repo.opencollab.dev/maven-snapshots"
+    }
+    maven {
+        url = uri("https://repo.opencollab.dev/maven-releases")
+    }
+    maven {
+        name = "extendedclip placeholderapi"
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
 }
 
 dependencies {
+    // ProjectKorra
+    implementation 'com.github.ProjectKorra:ProjectKorra:v1.11.2'
+
+    // floodgate api
+    implementation("org.geysermc.floodgate:api:2.2.2-SNAPSHOT")
+
+    // Brewery
+    implementation 'com.github.DieReicheErethons:Brewery:v3.1.1'
+
+    // spigot-api
     compileOnly "org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT"
+
+    // PlaceholderAPI
+    compileOnly 'me.clip:placeholderapi:2.11.3'
+
+    // ProtocolLib
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.0.0'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.28'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
 }
 
 def targetJavaVersion = 17
