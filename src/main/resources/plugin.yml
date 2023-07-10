@@ -2,5 +2,16 @@ name: HammerCore
 version: '${version}'
 main: ink.ziip.hammer.hammercore.HammerCore
 api-version: '1.20'
-authors: [EterLzb]
+authors: [ EterLzb ]
 description: Core plugin of TrialHammer.
+depend:
+  - ProtocolLib
+  - PlaceholderAPI
+  - floodgate
+softdepend:
+  - ProjectKorra
+  - Brewery
+commands:
+  hammercore:
+    description: Core command.
+    usage: /<command>

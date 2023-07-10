@@ -1,0 +1,105 @@
+# 头顶信息栏
+info-bar:
+  enabled: true
+  # 信息栏内容
+  content:
+    # Java 版内容
+    java:
+      # 默认内容
+      default: "#BFCFD4&rꐐ"
+      # 对应世界内容
+      world:
+        - "world:#BFCFD4%hammercoreworld_java%&rꐐ%hammercoreseason_java%%hammercoreweather_java%"
+        - "vanilla:#BFCFD4%hammercoreworld_java%&rꐐ"
+        - "nether:#BFCFD4%hammercoreworld_java%&rꐐ"
+        - "the_end:#BFCFD4%hammercoreworld_java%&rꐐ"
+    # 基岩版内容
+    bedrock:
+      default: "#BFCFD4%hammercoreworld_bedrock%"
+      world:
+        - "world:#BFCFD4%hammercoreworld_bedrock%&r %hammercoreseason_bedrock% %hammercoreweather_bedrock%"
+        - "vanilla:#BFCFD4%hammercoreworld_bedrock%"
+  # 世界名
+  world-name:
+    java:
+      default: ""
+      world:
+        - "world:ꀦ"
+        - "islands:ꀨ"
+        - "nether:ꀩ"
+        - "the_end:ꀪ"
+        - "spawn:ꀧ"
+        - "vanilla: "
+    bedrock:
+      default: "未知世界"
+      world:
+        - "world:主世界"
+        - "islands:浮空岛"
+        - "nether:下界"
+        - "the_end:末地"
+        - "spawn:主城"
+        - "vanilla:香草"
+  # 替换内容
+  info:
+    season:
+      default: ""
+      season:
+        - "春天:\uE114ꀀ"
+        - "夏天:\uE114ꀁ"
+        - "秋天:\uE114ꀂ"
+        - "冬天:\uE114ꀃ"
+        - "春:\uE115ꀀ"
+        - "夏:\uE115ꀁ"
+        - "秋:\uE115ꀂ"
+        - "冬:\uE115ꀃ"
+    weather:
+      default: ""
+      weather:
+        - "风和日丽:&aꀅ&cꀒ"
+        - "轻风:&aꀄ&eꀖ"
+        - "阴冷:&7ꀆ&cꀏ"
+        - "雨天:&3ꀊ&aꀗ"
+        - "灼热:&4ꀉ&6ꀐ"
+        - "炎热:&cꀍ&6ꀓ"
+        - "温暖:&6ꀎ&cꀓ"
+        - "寒冷:&bꀇ &cꀑ"
+        - "暴风:&bꀌ&cꀏ"
+        - "极寒:&bꀈ&cꀕ"
+        - "雪天:&bꀋ&cꀕ"
+        - "平静无风:"
+
+# 世界保护设置
+world-protection:
+  # Only Creeper
+  anti-explosion:
+    - world
+    - spawn
+    - void
+  anti-griefing:
+    - world
+    - spawn
+    - void
+  no-cartographer: true
+  prevent-farm-land-destroy: true
+
+# 基岩版设置
+floodgate:
+  # 隐藏粒子效果
+  hide-particles: true
+
+util:
+  # 特供建材标签
+  architecture-lore:
+    hidden: true
+    content:
+      - "特供建材"
+  # 去皮右键复原
+  peeling-recovery: true
+
+projectkorra:
+  all-earth-binder: false
+
+message:
+  no-permission: "&7[&c&l!&7] &4&l你没有权限。"
+  drinking-alcohol-is-bad-for-your-health: "&7[&c&l!&7] &4&l饮酒有害健康！未成年人不宜饮酒！"
+  meng-po-soup-tips: "&7[&c&l!&7] &b玩家&f%player_name%&b去奈何桥走了一遭。"
