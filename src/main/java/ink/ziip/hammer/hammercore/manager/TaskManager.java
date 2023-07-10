@@ -4,7 +4,7 @@ import ink.ziip.hammer.hammercore.api.manager.BaseManager;
 import ink.ziip.hammer.hammercore.api.task.BaseTask;
 import ink.ziip.hammer.hammercore.tasks.bar.ActionBarTask;
 import ink.ziip.hammer.hammercore.tasks.bar.BossBarTask;
-import ink.ziip.hammer.hammercore.tasks.bar.DataCleanerTask;
+import ink.ziip.hammer.hammercore.tasks.DataCleanerTask;
 
 public class TaskManager extends BaseManager {
 

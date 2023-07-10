@@ -1,4 +1,4 @@
-package ink.ziip.hammer.hammercore.tasks.bar;
+package ink.ziip.hammer.hammercore.tasks;
 
 import ink.ziip.hammer.hammercore.api.object.location.WoodLocation;
 import ink.ziip.hammer.hammercore.api.task.BaseTask;
