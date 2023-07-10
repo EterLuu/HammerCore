@@ -43,9 +43,7 @@ public class BossBarTask extends BaseTask {
     @Override
     public void stop() {
         if (started) {
-            new HashSet<>(infobarMap.keySet()).forEach(playerUUID -> {
-                infobarMap.get(playerUUID).removeAll();
-            });
+            new HashSet<>(infobarMap.keySet()).forEach(playerUUID -> infobarMap.get(playerUUID).removeAll());
             infobarMap.clear();
             cancel();
         }

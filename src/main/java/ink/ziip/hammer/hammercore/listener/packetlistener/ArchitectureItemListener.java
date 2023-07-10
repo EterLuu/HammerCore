@@ -37,16 +37,14 @@ public class ArchitectureItemListener extends BasePacketListener {
 
                     if (itemStack != null && itemStack.getType() != Material.AIR && itemStack.getItemMeta() != null && itemStack.getItemMeta().getLore() != null) {
                         itemStack.getItemMeta().getLore().forEach(
-                                lore -> {
-                                    ConfigManager.UTIL_ARCHITECTURE_LORE_HIDDEN_CONTENT.forEach(
-                                            filter -> {
-                                                if (lore.contains(filter)) {
-                                                    ItemMeta itemMeta = itemStack.getItemMeta();
-                                                    itemMeta.setLore(null);
-                                                    itemStack.setItemMeta(itemMeta);
-                                                }
-                                            });
-                                });
+                                lore -> ConfigManager.UTIL_ARCHITECTURE_LORE_HIDDEN_CONTENT.forEach(
+                                        filter -> {
+                                            if (lore.contains(filter)) {
+                                                ItemMeta itemMeta = itemStack.getItemMeta();
+                                                itemMeta.setLore(null);
+                                                itemStack.setItemMeta(itemMeta);
+                                            }
+                                        }));
                     }
                 }
 
@@ -55,16 +53,14 @@ public class ArchitectureItemListener extends BasePacketListener {
                     for (ItemStack itemStack : itemStacks) {
                         if (itemStack != null && itemStack.getType() != Material.AIR && itemStack.getItemMeta() != null && itemStack.getItemMeta().getLore() != null) {
                             itemStack.getItemMeta().getLore().forEach(
-                                    lore -> {
-                                        ConfigManager.UTIL_ARCHITECTURE_LORE_HIDDEN_CONTENT.forEach(
-                                                filter -> {
-                                                    if (lore.contains(filter)) {
-                                                        ItemMeta itemMeta = itemStack.getItemMeta();
-                                                        itemMeta.setLore(null);
-                                                        itemStack.setItemMeta(itemMeta);
-                                                    }
-                                                });
-                                    });
+                                    lore -> ConfigManager.UTIL_ARCHITECTURE_LORE_HIDDEN_CONTENT.forEach(
+                                            filter -> {
+                                                if (lore.contains(filter)) {
+                                                    ItemMeta itemMeta = itemStack.getItemMeta();
+                                                    itemMeta.setLore(null);
+                                                    itemStack.setItemMeta(itemMeta);
+                                                }
+                                            }));
                         }
                     }
                 }
