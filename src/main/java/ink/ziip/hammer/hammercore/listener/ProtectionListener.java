@@ -90,7 +90,7 @@ public class ProtectionListener extends BaseListener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         if (player.hasPermission("hammercore.utils.keepinventory")
