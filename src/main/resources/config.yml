@@ -97,6 +97,15 @@ util:
   peeling-recovery: true
   disable-join-message: true
   disable-quit-message: true
+  auto-respawn:
+    enabled: true
+    location:
+      world: "spawn"
+      x: 309
+      y: 62
+      z: 632.5
+      yaw: 90
+      pitch: -3
 
 projectkorra:
   all-earth-binder: false

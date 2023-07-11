@@ -1,12 +1,15 @@
 package ink.ziip.hammer.hammercore.listener;
 
+import ink.ziip.hammer.hammercore.HammerCore;
 import ink.ziip.hammer.hammercore.api.listener.BaseListener;
 import ink.ziip.hammer.hammercore.manager.ConfigManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class QuickActionListener extends BaseListener {
 
@@ -57,5 +60,18 @@ public class QuickActionListener extends BaseListener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (ConfigManager.UTIL_DISABLE_QUIT_MESSAGE)
             event.setQuitMessage(null);
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        if (ConfigManager.UTIL_AUTO_RESPAWN_ENABLED) {
+            Player player = event.getEntity();
+            new BukkitRunnable() {
+                public void run() {
+                    player.spigot().respawn();
+                    player.teleport(ConfigManager.UTIL_AUTO_RESPAWN_LOCATION);
+                }
+            }.runTaskLater(HammerCore.getInstance(), 1L);
+        }
     }
 }

@@ -3,10 +3,14 @@ package ink.ziip.hammer.hammercore.manager;
 import ink.ziip.hammer.hammercore.HammerCore;
 import ink.ziip.hammer.hammercore.api.manager.BaseManager;
 import ink.ziip.hammer.hammercore.api.util.Utils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ConfigManager extends BaseManager {
 
@@ -35,6 +39,8 @@ public class ConfigManager extends BaseManager {
     public static Boolean UTIL_PEELING_RECOVERY;
     public static Boolean UTIL_DISABLE_JOIN_MESSAGE;
     public static Boolean UTIL_DISABLE_QUIT_MESSAGE;
+    public static Boolean UTIL_AUTO_RESPAWN_ENABLED;
+    public static Location UTIL_AUTO_RESPAWN_LOCATION;
 
     public static Boolean PROJECTKORRA_ALL_EARTH_BINDER;
 
@@ -95,6 +101,18 @@ public class ConfigManager extends BaseManager {
         UTIL_PEELING_RECOVERY = config.getBoolean("util.peeling-recovery", true);
         UTIL_DISABLE_JOIN_MESSAGE = config.getBoolean("util.disable-join-message", true);
         UTIL_DISABLE_QUIT_MESSAGE = config.getBoolean("util.disable-quit-message", true);
+        UTIL_AUTO_RESPAWN_ENABLED = config.getBoolean("util.auto-respawn.enabled", true);
+
+        World world = Bukkit.getWorld(Objects.requireNonNull(config.getString("util.auto-respawn.location.world")));
+        double x, y, z;
+        float yaw, pitch;
+        x = Double.parseDouble(Objects.requireNonNull(config.getString("util.auto-respawn.location.x")));
+        y = Double.parseDouble(Objects.requireNonNull(config.getString("util.auto-respawn.location.y")));
+        z = Double.parseDouble(Objects.requireNonNull(config.getString("util.auto-respawn.location.z")));
+        yaw = Float.parseFloat(Objects.requireNonNull(config.getString("util.auto-respawn.location.yaw")));
+        pitch = Float.parseFloat(Objects.requireNonNull(config.getString("util.auto-respawn.location.pitch")));
+
+        UTIL_AUTO_RESPAWN_LOCATION = new Location(world, x, y, z, yaw, pitch);
 
         PROJECTKORRA_ALL_EARTH_BINDER = config.getBoolean("projectkorra.all-earth-binder", false);
     }
