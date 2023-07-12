@@ -1,5 +1,7 @@
 package ink.ziip.hammer.hammercore;
 
+import ink.ziip.hammer.hammercore.api.object.location.WoodLocation;
+import ink.ziip.hammer.hammercore.api.object.user.HammerUser;
 import ink.ziip.hammer.hammercore.manager.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -74,6 +76,10 @@ public final class HammerCore extends JavaPlugin {
         placeholderExpansionManager.unload();
         taskManager.unload();
         listenerManager.unload();
+
+        // Clean cache
+        HammerUser.cleanHammerUsers();
+        WoodLocation.cleanWoods();
     }
 
     public static HammerCore getInstance() {

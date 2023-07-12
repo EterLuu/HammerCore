@@ -37,12 +37,16 @@ public class WoodLocation {
         return woodLocationMap.containsKey(woodLocation);
     }
 
-    public static void removeOutdatedWood() {
+    public static void removeOutdatedWoods() {
         for (Map.Entry<WoodLocation, WoodLocation> entry : woodLocationMap.entrySet()) {
             if (System.currentTimeMillis() - entry.getValue().strippedTime > 300000) {
                 woodLocationMap.remove(entry.getKey());
             }
         }
+    }
+
+    public static void cleanWoods() {
+        woodLocationMap.clear();
     }
 
     @Override

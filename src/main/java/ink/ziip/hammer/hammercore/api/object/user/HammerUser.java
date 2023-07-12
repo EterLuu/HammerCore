@@ -13,7 +13,10 @@ import lombok.NonNull;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.util.Map;
@@ -45,7 +48,7 @@ public class HammerUser {
     }
 
     private HammerUser(@NonNull OfflinePlayer offlinePlayer) {
-        this.player = offlinePlayer.getPlayer();
+        this.player = offlinePlayer.isOnline() ? offlinePlayer.getPlayer() : null;
         this.offlinePlayer = offlinePlayer;
         this.playerUUID = offlinePlayer.getUniqueId();
         this.bedrockPlayer = floodgateApi.isFloodgateId(this.playerUUID);
@@ -53,10 +56,18 @@ public class HammerUser {
     }
 
     private HammerUser(@NonNull UUID uuid) {
-        this.player = Bukkit.getPlayer(uuid);
-        this.offlinePlayer = Bukkit.getOfflinePlayer(uuid);
         this.playerUUID = uuid;
+        this.offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+        this.player = offlinePlayer.isOnline() ? offlinePlayer.getPlayer() : null;
         this.bedrockPlayer = floodgateApi.isFloodgateId(this.playerUUID);
+        users.put(this.playerUUID, this);
+    }
+
+    private HammerUser(@NonNull CommandSender commandSender) {
+        this.player = Bukkit.getPlayer(commandSender.getName());
+        this.playerUUID = player != null ? player.getUniqueId() : null;
+        this.offlinePlayer = player != null ? Bukkit.getOfflinePlayer(playerUUID) : null;
+        this.bedrockPlayer = player != null && floodgateApi.isFloodgateId(this.playerUUID);
         users.put(this.playerUUID, this);
     }
 
@@ -81,6 +92,36 @@ public class HammerUser {
         return new HammerUser(uuid);
     }
 
+    public static HammerUser getUser(@NonNull CommandSender commandSender) {
+        Player player = Bukkit.getPlayer(commandSender.getName());
+
+        if (player == null)
+            return null;
+
+        UUID uuid = player.getUniqueId();
+
+        if (users.containsKey(uuid)) {
+            return users.get(uuid);
+        }
+        return new HammerUser(uuid);
+    }
+
+    public static void removeHammerUser(@NonNull Player player) {
+        users.remove(player.getUniqueId());
+    }
+
+    public static void removeHammerUser(@NonNull OfflinePlayer offlinePlayer) {
+        users.remove(offlinePlayer.getUniqueId());
+    }
+
+    public static void removeHammerUser(@NonNull UUID uuid) {
+        users.remove(uuid);
+    }
+
+    public static void cleanHammerUsers() {
+        users.clear();
+    }
+
     public boolean isBedrockPlayer() {
         return bedrockPlayer;
     }
@@ -90,7 +131,7 @@ public class HammerUser {
     }
 
     public void sendActionBar(String content, boolean filtered) {
-        WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromLegacyText(PlaceholderAPI.setPlaceholders(player, content));
+        WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromLegacyText(setPlaceholders(content));
         PacketContainer packetContainer = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
         StructureModifier<Integer> integers = packetContainer.getIntegers();
         if (integers.size() == 1) {
@@ -106,11 +147,47 @@ public class HammerUser {
     }
 
     public void sendMessage(String content) {
-        content = PlaceholderAPI.setPlaceholders(player, content);
-        player.sendMessage(Utils.translateColorCodes(content));
+        player.sendMessage(Utils.translateColorCodes(setPlaceholders(content)));
     }
 
     public String setPlaceholders(String content) {
-        return Utils.translateColorCodes(PlaceholderAPI.setPlaceholders(player, content));
+        // Using offlinePlayer to avoid issues
+        return Utils.translateColorCodes(PlaceholderAPI.setPlaceholders(offlinePlayer, content));
+    }
+
+    public Player getTargetPlayer() {
+        return getTarget(player, player.getWorld().getPlayers());
+    }
+
+    public Entity getTargetEntity() {
+        return getTarget(player, player.getWorld().getEntities());
+    }
+
+    // Source: https://bukkit.org/threads/get-entity-player-is-looking.300661/#post-2727103
+    public <T extends Entity> T getTarget(final Entity entity, final Iterable<T> entities) {
+        if (entity == null)
+            return null;
+
+        T target = null;
+        final double threshold = 1;
+
+        for (final T other : entities) {
+            final Vector n = other
+                    .getLocation()
+                    .toVector()
+                    .subtract(entity.getLocation().toVector());
+            if (entity.getLocation().getDirection().normalize().crossProduct(n)
+                    .lengthSquared() < threshold
+                    && n.normalize().dot(
+                    entity.getLocation().getDirection().normalize()) >= 0) {
+                if (target == null
+                        || target.getLocation().distanceSquared(
+                        entity.getLocation()) > other.getLocation()
+                        .distanceSquared(entity.getLocation()))
+                    target = other;
+            }
+        }
+
+        return target;
     }
 }

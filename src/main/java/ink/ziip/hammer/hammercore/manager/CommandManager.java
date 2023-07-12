@@ -3,6 +3,7 @@ package ink.ziip.hammer.hammercore.manager;
 import ink.ziip.hammer.hammercore.api.manager.BaseManager;
 import ink.ziip.hammer.hammercore.command.MainCommand;
 import ink.ziip.hammer.hammercore.command.sub.AdminCommand;
+import ink.ziip.hammer.hammercore.command.sub.RideCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 
@@ -22,6 +23,7 @@ public class CommandManager extends BaseManager {
 
         // Sub commands adding
         this.mainCommand.addSubCommand(new AdminCommand());
+        this.mainCommand.addSubCommand(new RideCommand());
 
         if (this.pluginCommand != null) {
             this.pluginCommand.setExecutor(this.mainCommand);

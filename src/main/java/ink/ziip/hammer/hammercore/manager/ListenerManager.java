@@ -14,8 +14,8 @@ public class ListenerManager extends BaseManager {
     private final BaseListener ProtectionListener;
     private final BaseListener breweryListener;
     private final BaseListener peelingRecoveryListener;
-
     private final BaseListener quickActionListener;
+    private final BaseListener joinQuitListener;
 
     public ListenerManager() {
         bossBarTaskListener = new BossBarTaskListener();
@@ -24,10 +24,13 @@ public class ListenerManager extends BaseManager {
         breweryListener = new BreweryListener();
         peelingRecoveryListener = new PeelingRecoveryListener();
         quickActionListener = new QuickActionListener();
+        joinQuitListener = new JoinQuitListener();
     }
 
     @Override
     public void load() {
+
+        joinQuitListener.register();
         bossBarTaskListener.register();
         mineCartAcceleratorListener.register();
         ProtectionListener.register();

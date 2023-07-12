@@ -21,7 +21,7 @@ public class DataCleanerTask extends BaseTask {
     @Override
     public void run() {
         if (started) {
-            WoodLocation.removeOutdatedWood();
+            WoodLocation.removeOutdatedWoods();
         }
     }
 

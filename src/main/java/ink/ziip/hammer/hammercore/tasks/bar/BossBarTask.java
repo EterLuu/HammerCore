@@ -52,10 +52,10 @@ public class BossBarTask extends BaseTask {
     @Override
     public void run() {
         if (started) {
-            for (Map.Entry<UUID, BossBar> entry : infobarMap.entrySet()) {
-                Player player = Bukkit.getPlayer(entry.getKey());
-                if (player != null)
-                    updateBossBar(entry.getValue(), player);
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                BossBar bossBar = infobarMap.get(player.getUniqueId());
+                if (bossBar != null)
+                    updateBossBar(bossBar, player);
             }
         }
     }
@@ -66,8 +66,9 @@ public class BossBarTask extends BaseTask {
 
     public void updateBossBar(BossBar bossbar, Player player) {
         HammerUser hammerUser = HammerUser.getUser(player);
+        String worldName = player.getWorld().getName();
         if (hammerUser.isBedrockPlayer()) {
-            String infoContent = INFO_BAR_CONTENT_BEDROCK_WORLD_LIST.get(player.getWorld().getName());
+            String infoContent = INFO_BAR_CONTENT_BEDROCK_WORLD_LIST.get(worldName);
             if (infoContent != null) {
                 bossbar.setTitle(hammerUser.setPlaceholders(infoContent));
                 return;
@@ -75,7 +76,7 @@ public class BossBarTask extends BaseTask {
             bossbar.setTitle(hammerUser.setPlaceholders(INFO_BAR_CONTENT_BEDROCK_DEFAULT));
             return;
         }
-        String infoContent = INFO_BAR_CONTENT_JAVA_WORLD_LIST.get(player.getWorld().getName());
+        String infoContent = INFO_BAR_CONTENT_JAVA_WORLD_LIST.get(worldName);
         if (infoContent != null) {
             bossbar.setTitle(hammerUser.setPlaceholders(infoContent));
             return;
@@ -84,17 +85,15 @@ public class BossBarTask extends BaseTask {
     }
 
     public static void addToAll(Player player) {
-        UUID playerUUID = player.getUniqueId();
-        infobarMap.remove(playerUUID);
         BossBar bossBar = createBossBar();
         bossBar.addPlayer(player);
-        infobarMap.put(playerUUID, bossBar);
+        infobarMap.put(player.getUniqueId(), bossBar);
     }
 
     public static void removeFromAll(Player player) {
         UUID playerUUID = player.getUniqueId();
         if (infobarMap.containsKey(playerUUID)) {
-            infobarMap.get(playerUUID).removePlayer(player);
+            infobarMap.get(playerUUID).removeAll();
             infobarMap.remove(playerUUID);
         }
     }
