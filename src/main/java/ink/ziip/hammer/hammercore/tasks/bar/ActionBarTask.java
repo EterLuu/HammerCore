@@ -22,22 +22,18 @@ public class ActionBarTask extends BaseTask {
 
     @Override
     public void run() {
-
         if (started) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player != null) {
-                    if (!player.isInWater()) {
-                        HammerUser hammerUser = HammerUser.getUser(player);
-                        if (!hammerUser.isBedrockPlayer()) {
-                            if (System.currentTimeMillis() - hammerUser.getActionBarSendingTime() > 1000) {
-                                hammerUser.sendActionBar("%pkaddons_actionbar%", true);
-                            }
+                if (!player.isInWater()) {
+                    HammerUser hammerUser = HammerUser.getUser(player);
+                    if (!hammerUser.isBedrockPlayer()) {
+                        if (System.currentTimeMillis() - hammerUser.getActionBarSendingTime() > 1000) {
+                            hammerUser.sendActionBar("%pkaddons_actionbar%", true);
                         }
                     }
                 }
             }
         }
-
     }
 
     @Override
