@@ -47,7 +47,12 @@ public class QuickActionListener extends BaseListener {
             return;
         }
         Player player = event.getPlayer();
-        player.performCommand("dm open main_menu");
+
+        if (player.hasPermission("group.player")) {
+            player.performCommand("dm open main_menu");
+        } else {
+            player.performCommand("tutorial 6");
+        }
     }
 
     @EventHandler
