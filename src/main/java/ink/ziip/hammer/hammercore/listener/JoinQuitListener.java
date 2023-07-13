@@ -13,6 +13,14 @@ public class JoinQuitListener extends BaseListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         HammerUser.getUser(player);
+
+        // Remove invalid potion effects
+        player.getActivePotionEffects().forEach(
+                potionEffect -> {
+                    if (potionEffect.getDuration() > 6000) {
+                        player.removePotionEffect(potionEffect.getType());
+                    }
+                });
     }
 
     // Remove user cache when leaving to avoid issue
