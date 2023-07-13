@@ -11,6 +11,7 @@ depend:
 softdepend:
   - ProjectKorra
   - Brewery
+  - Spartan
 commands:
   hammercore:
     description: Core command.

@@ -35,14 +35,19 @@ public class ListenerManager extends BaseManager {
         mineCartAcceleratorListener.register();
         ProtectionListener.register();
 
-        if (Bukkit.getPluginManager().getPlugin("Brewery") != null &&
-                Bukkit.getPluginManager().getPlugin("ProjectKorra") != null) {
+        if (Bukkit.getPluginManager().getPlugin("Brewery") != null
+                && Bukkit.getPluginManager().getPlugin("ProjectKorra") != null) {
             breweryListener.register();
 
             if (ConfigManager.PROJECTKORRA_ALL_EARTH_BINDER) {
                 ProjectKorraListener projectKorraListener = new ProjectKorraListener();
                 projectKorraListener.register();
             }
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("Spartan") != null) {
+            SpartanListener spartanListener = new SpartanListener();
+            spartanListener.register();
         }
 
         if (ConfigManager.UTIL_PEELING_RECOVERY) {
