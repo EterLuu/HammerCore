@@ -114,3 +114,5 @@ message:
   no-permission: "&7[&c&l!&7] &4&l你没有权限。"
   drinking-alcohol-is-bad-for-your-health: "&7[&c&l!&7] &4&l饮酒有害健康！未成年人不宜饮酒！"
   meng-po-soup-tips: "&7[&c&l!&7] &b玩家&f%player_name%&b去奈何桥走了一遭。"
+  what-are-you-doing: "&7[&c&l!&7] &4&l你想要干什么！！！"
+  no-entity-was-targeted: "&7[&c&l!&7] &4&l你没有对准任何实体（或者距离太远）。"

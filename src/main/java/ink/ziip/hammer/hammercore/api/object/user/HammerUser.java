@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NonNull;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -19,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.geysermc.floodgate.api.FloodgateApi;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,9 +30,12 @@ public class HammerUser {
 
     private static final Map<UUID, HammerUser> users = new ConcurrentHashMap<>();
 
+    @Nullable
     private final Player player;
     private final OfflinePlayer offlinePlayer;
     private final UUID playerUUID;
+    private final CommandSender commandSender;
+
     private final boolean bedrockPlayer;
 
     private Long actionBarSendingTime = System.currentTimeMillis();
@@ -43,6 +48,7 @@ public class HammerUser {
         this.player = player;
         this.offlinePlayer = player;
         this.playerUUID = player.getUniqueId();
+        this.commandSender = player;
         this.bedrockPlayer = floodgateApi.isFloodgateId(this.playerUUID);
         users.put(this.playerUUID, this);
     }
@@ -51,6 +57,7 @@ public class HammerUser {
         this.player = offlinePlayer.isOnline() ? offlinePlayer.getPlayer() : null;
         this.offlinePlayer = offlinePlayer;
         this.playerUUID = offlinePlayer.getUniqueId();
+        this.commandSender = offlinePlayer.isOnline() ? offlinePlayer.getPlayer() : null;
         this.bedrockPlayer = floodgateApi.isFloodgateId(this.playerUUID);
         users.put(this.playerUUID, this);
     }
@@ -59,11 +66,13 @@ public class HammerUser {
         this.playerUUID = uuid;
         this.offlinePlayer = Bukkit.getOfflinePlayer(uuid);
         this.player = offlinePlayer.isOnline() ? offlinePlayer.getPlayer() : null;
+        this.commandSender = offlinePlayer.isOnline() ? offlinePlayer.getPlayer() : null;
         this.bedrockPlayer = floodgateApi.isFloodgateId(this.playerUUID);
         users.put(this.playerUUID, this);
     }
 
     private HammerUser(@NonNull CommandSender commandSender) {
+        this.commandSender = commandSender;
         this.player = Bukkit.getPlayer(commandSender.getName());
         this.playerUUID = player != null ? player.getUniqueId() : null;
         this.offlinePlayer = player != null ? Bukkit.getOfflinePlayer(playerUUID) : null;
@@ -93,17 +102,10 @@ public class HammerUser {
     }
 
     public static HammerUser getUser(@NonNull CommandSender commandSender) {
-        Player player = Bukkit.getPlayer(commandSender.getName());
+        if (commandSender instanceof Player)
+            return getUser((Player) commandSender);
 
-        if (player == null)
-            return null;
-
-        UUID uuid = player.getUniqueId();
-
-        if (users.containsKey(uuid)) {
-            return users.get(uuid);
-        }
-        return new HammerUser(uuid);
+        return new HammerUser(commandSender);
     }
 
     public static void removeHammerUser(@NonNull Player player) {
@@ -127,6 +129,9 @@ public class HammerUser {
     }
 
     public boolean hasPermission(String name) {
+        if (player == null)
+            return commandSender.hasPermission(name);
+
         return player.hasPermission(name);
     }
 
@@ -147,6 +152,11 @@ public class HammerUser {
     }
 
     public void sendMessage(String content) {
+        if (player == null) {
+            commandSender.sendMessage(Utils.translateColorCodes(setPlaceholders(content)));
+            return;
+        }
+
         player.sendMessage(Utils.translateColorCodes(setPlaceholders(content)));
     }
 
@@ -156,34 +166,39 @@ public class HammerUser {
     }
 
     public Player getTargetPlayer() {
+        if (player == null)
+            return null;
+
         return getTarget(player, player.getWorld().getPlayers());
     }
 
     public Entity getTargetEntity() {
-        return getTarget(player, player.getWorld().getEntities());
+        if (player == null)
+            return null;
+
+        return getTarget(player, player.getNearbyEntities(50, 50, 50));
     }
 
     // Source: https://bukkit.org/threads/get-entity-player-is-looking.300661/#post-2727103
-    public <T extends Entity> T getTarget(final Entity entity, final Iterable<T> entities) {
+    private <T extends Entity> T getTarget(final Entity entity, final Iterable<T> entities) {
         if (entity == null)
             return null;
 
         T target = null;
+        final Location entityLocation = entity.getLocation();
+        final Vector entityVector = entityLocation.toVector();
         final double threshold = 1;
 
         for (final T other : entities) {
-            final Vector n = other
-                    .getLocation()
-                    .toVector()
-                    .subtract(entity.getLocation().toVector());
-            if (entity.getLocation().getDirection().normalize().crossProduct(n)
-                    .lengthSquared() < threshold
-                    && n.normalize().dot(
-                    entity.getLocation().getDirection().normalize()) >= 0) {
-                if (target == null
-                        || target.getLocation().distanceSquared(
-                        entity.getLocation()) > other.getLocation()
-                        .distanceSquared(entity.getLocation()))
+            Vector otherEntityVector = other.getLocation().toVector();
+
+            final Vector n = otherEntityVector.subtract(entityVector);
+
+            boolean targeted = entityLocation.getDirection().normalize().crossProduct(n).lengthSquared() < threshold && n.normalize().dot(entityLocation.getDirection().normalize()) >= 0;
+            if (targeted) {
+
+                boolean closed = target == null || target.getLocation().distanceSquared(entityLocation) > other.getLocation().distanceSquared(entityLocation);
+                if (closed)
                     target = other;
             }
         }
