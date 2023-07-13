@@ -15,3 +15,6 @@ commands:
   hammercore:
     description: Core command.
     usage: /<command>
+  menu:
+    description: Opening menu command.
+    usage: /<command>
