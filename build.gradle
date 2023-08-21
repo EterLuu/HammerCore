@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = 'ink.ziip.hammer'
-version = '1.1-SNAPSHOT'
+version = '1.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -31,8 +32,16 @@ repositories {
         url = uri("https://repo.opencollab.dev/maven-releases")
     }
     maven {
+        name = "CodeMC"
+        url = uri("https://repo.codemc.io/repository/maven-public/")
+    }
+    maven {
         name = "extendedclip placeholderapi"
         url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
+    maven {
+        name = "playpro"
+        url = 'https://maven.playpro.com/'
     }
 }
 
@@ -48,6 +57,12 @@ dependencies {
 
     // Brewery
     implementation 'com.github.DieReicheErethons:Brewery:v3.1.1'
+
+    // NBT API
+    implementation("de.tr7zw:item-nbt-api:2.11.3")
+
+    // CoreProtect
+    implementation("net.coreprotect:coreprotect:22.0")
 
     // spigot-api
     compileOnly "org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT"
@@ -89,4 +104,12 @@ processResources {
     filesMatching('plugin.yml') {
         expand props
     }
+}
+
+shadowJar {
+    relocate("de.tr7zw.changeme.nbtapi", "ink.ziip.hammer.nbtapi")
+}
+
+build {
+    dependsOn(shadowJar)
 }

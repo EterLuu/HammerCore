@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,6 +43,8 @@ public class RideCommand extends BaseSubCommand {
             }
 
             if (player != null) {
+                if (entity instanceof Projectile)
+                    return true;
                 entity.addPassenger(player);
             }
 

@@ -6,6 +6,7 @@ import ink.ziip.hammer.hammercore.command.MainCommand;
 import ink.ziip.hammer.hammercore.command.MenuCommand;
 import ink.ziip.hammer.hammercore.command.sub.AdminCommand;
 import ink.ziip.hammer.hammercore.command.sub.RideCommand;
+import ink.ziip.hammer.hammercore.command.sub.SayCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
@@ -36,6 +37,7 @@ public class CommandManager extends BaseManager {
         // Sub commands adding
         this.mainCommand.addSubCommand(new AdminCommand());
         this.mainCommand.addSubCommand(new RideCommand());
+        this.mainCommand.addSubCommand(new SayCommand());
 
         if (this.corePluginCommand != null) {
             this.corePluginCommand.setExecutor(this.mainCommand);

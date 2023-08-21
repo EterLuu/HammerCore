@@ -43,6 +43,25 @@ public class HammerUser {
 
     private ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
     private FloodgateApi floodgateApi = FloodgateApi.getInstance();
+    private int magicStickUsingTimes = 0;
+    private Long magicStickPendingTime = 0L;
+
+    public boolean canUseMagicStick(){
+        if(System.currentTimeMillis() - magicStickPendingTime > 120000){
+            return true;
+        }
+
+        return false;
+    }
+
+    public void useMagicStick(){
+        magicStickUsingTimes++;
+
+        if(magicStickUsingTimes == 10){
+            magicStickPendingTime = System.currentTimeMillis();
+            magicStickUsingTimes = 0;
+        }
+    }
 
     private HammerUser(@NonNull Player player) {
         this.player = player;
@@ -204,5 +223,12 @@ public class HammerUser {
         }
 
         return target;
+    }
+
+    public boolean isFlyingTooHigh() {
+        if (player == null)
+            return false;
+
+        return player.getLocation().getY() > 1900;
     }
 }

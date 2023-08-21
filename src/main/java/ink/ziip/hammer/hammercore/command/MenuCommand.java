@@ -22,7 +22,7 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
             if (player.hasPermission("group.player")) {
                 player.performCommand("dm open main_menu");
             } else {
-                player.performCommand("tutorial 6");
+                player.performCommand("tutorial 5");
             }
         }
 

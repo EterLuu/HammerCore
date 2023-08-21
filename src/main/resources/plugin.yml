@@ -12,6 +12,7 @@ softdepend:
   - ProjectKorra
   - Brewery
   - Spartan
+  - CoreProtect
 commands:
   hammercore:
     description: Core command.

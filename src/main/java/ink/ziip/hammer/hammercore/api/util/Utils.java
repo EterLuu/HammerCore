@@ -2,14 +2,47 @@ package ink.ziip.hammer.hammercore.api.util;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
+import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @UtilityClass
 public class Utils {
+
+    private static final PotionEffectType[] badEffects = new PotionEffectType[]{
+            PotionEffectType.SLOW,
+            PotionEffectType.WITHER,
+            PotionEffectType.WEAKNESS,
+            PotionEffectType.BLINDNESS,
+            PotionEffectType.HUNGER,
+            PotionEffectType.INVISIBILITY,
+            PotionEffectType.INVISIBILITY,
+            PotionEffectType.POISON,
+            PotionEffectType.LEVITATION,
+            PotionEffectType.LEVITATION,
+            PotionEffectType.GLOWING,
+            PotionEffectType.GLOWING,
+    };
+
+    private static final String[] badEffectsTranslation = new String[]{
+            "迟缓",
+            "凋零",
+            "虚弱",
+            "失明",
+            "饥饿",
+            "隐身",
+            "隐身",
+            "中毒",
+            "漂浮",
+            "漂浮",
+            "发光",
+            "发光",
+    };
 
     public static String translateColorCodes(String message) {
         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
@@ -40,5 +73,11 @@ public class Utils {
                 });
 
         return map;
+    }
+
+    public List<Object> getRandomPotionEffect(){
+        Random random = new Random();
+        int num = random.nextInt(0, badEffects.length);
+        return Arrays.asList(badEffects[num], badEffectsTranslation[num]);
     }
 }

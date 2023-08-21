@@ -4,6 +4,7 @@ import ink.ziip.hammer.hammercore.api.listener.BaseListener;
 import ink.ziip.hammer.hammercore.api.util.Utils;
 import ink.ziip.hammer.hammercore.manager.ConfigManager;
 import ink.ziip.hammer.hammercore.manager.MessageManager;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -12,8 +13,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.regex.Pattern;
 
@@ -64,7 +70,7 @@ public class ProtectionListener extends BaseListener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    public void onPlayerInteractWithFarm(PlayerInteractEvent event) {
         if (!ConfigManager.WORLD_PROTECTION_PREVENT_FARM_LAND_DESTROY)
             return;
         if (event.getAction() == Action.PHYSICAL) {
@@ -80,7 +86,7 @@ public class ProtectionListener extends BaseListener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
+    public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String pattern = "[ꀀ-\uA48F]";
 
@@ -91,14 +97,80 @@ public class ProtectionListener extends BaseListener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onEntityDeath(PlayerDeathEvent event) {
+    public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        if (player.hasPermission("hammercore.utils.keepinventory")
+        if (player.hasPermission("hammercore.utils.keepinventory") || player.getLocation().getY() < -64
                 || (player.getLocation().getWorld() != null && player.getLocation().getWorld().getName().equals("nether") && player.getLocation().getY() >= 127)) {
             event.getDrops().clear();
             event.setDroppedExp(0);
             event.setKeepInventory(true);
             event.setKeepLevel(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onUsingSouvenir(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        ItemStack itemStack = event.getItem();
+        if (itemStack == null)
+            return;
+
+        if (itemStack.getType() != Material.MAP && itemStack.getType() != Material.ENDER_EYE)
+            return;
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null)
+            return;
+
+        if (!itemMeta.hasLore())
+            return;
+
+        itemMeta.getLore().forEach(content -> {
+            boolean isSouvenir = Pattern.matches("<[0-9]{4}-[0-9]{2}>", ChatColor.stripColor(content));
+            if (isSouvenir) {
+                event.setCancelled(true);
+            }
+        });
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onUsingCartography(PrepareItemCraftEvent event) {
+        if (event.getInventory().getResult() != null && event.getInventory().getResult().getType() == Material.FILLED_MAP) {
+            ItemMeta itemMeta = event.getInventory().getResult().getItemMeta();
+            if (itemMeta != null) {
+                if (itemMeta.hasLore()) {
+                    for (String lore : itemMeta.getLore()) {
+                        String regex = "\\[[0-9]{4}-[0-9]{2}]";
+                        if (Pattern.matches(regex, ChatColor.stripColor(lore))) {
+                            event.getInventory().setResult(new ItemStack(Material.AIR));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onUsingWorkbenchToCopyMap(InventoryClickEvent event) {
+        ItemStack itemStack = event.getCurrentItem();
+        if (event.getClickedInventory() != null) {
+            if (event.getSlotType() == InventoryType.SlotType.RESULT && itemStack != null && event.getClickedInventory().getType() == InventoryType.CARTOGRAPHY) {
+                if (itemStack.getType() == Material.FILLED_MAP) {
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    if (itemMeta != null) {
+                        if (itemMeta.hasLore()) {
+                            for (String lore : itemMeta.getLore()) {
+                                String regex = "\\[[0-9]{4}-[0-9]{2}]";
+                                if (Pattern.matches(regex, ChatColor.stripColor(lore))) {
+                                    event.setCancelled(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

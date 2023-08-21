@@ -4,6 +4,7 @@ import ink.ziip.hammer.hammercore.HammerCore;
 import ink.ziip.hammer.hammercore.api.listener.BaseListener;
 import ink.ziip.hammer.hammercore.api.manager.BaseManager;
 import ink.ziip.hammer.hammercore.listener.*;
+import ink.ziip.hammer.hammercore.listener.packetlistener.SnowballListener;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 
@@ -16,6 +17,7 @@ public class ListenerManager extends BaseManager {
     private final BaseListener peelingRecoveryListener;
     private final BaseListener quickActionListener;
     private final BaseListener joinQuitListener;
+    private final BaseListener snowBallListener;
 
     public ListenerManager() {
         bossBarTaskListener = new BossBarTaskListener();
@@ -25,6 +27,7 @@ public class ListenerManager extends BaseManager {
         peelingRecoveryListener = new PeelingRecoveryListener();
         quickActionListener = new QuickActionListener();
         joinQuitListener = new JoinQuitListener();
+        snowBallListener = new SnowballListener();
     }
 
     @Override
@@ -55,6 +58,7 @@ public class ListenerManager extends BaseManager {
         }
 
         quickActionListener.register();
+        snowBallListener.register();
 
     }
 
