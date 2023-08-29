@@ -9,7 +9,9 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import ink.ziip.hammer.hammercore.api.util.Utils;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -45,19 +47,18 @@ public class HammerUser {
     private FloodgateApi floodgateApi = FloodgateApi.getInstance();
     private int magicStickUsingTimes = 0;
     private Long magicStickPendingTime = 0L;
+    @Getter
+    @Setter
+    private boolean removeMineCartOnLeaving = true;
 
-    public boolean canUseMagicStick(){
-        if(System.currentTimeMillis() - magicStickPendingTime > 120000){
-            return true;
-        }
-
-        return false;
+    public boolean canUseMagicStick() {
+        return System.currentTimeMillis() - magicStickPendingTime > 120000;
     }
 
-    public void useMagicStick(){
+    public void useMagicStick() {
         magicStickUsingTimes++;
 
-        if(magicStickUsingTimes == 10){
+        if (magicStickUsingTimes == 10) {
             magicStickPendingTime = System.currentTimeMillis();
             magicStickUsingTimes = 0;
         }
@@ -223,12 +224,5 @@ public class HammerUser {
         }
 
         return target;
-    }
-
-    public boolean isFlyingTooHigh() {
-        if (player == null)
-            return false;
-
-        return player.getLocation().getY() > 1900;
     }
 }

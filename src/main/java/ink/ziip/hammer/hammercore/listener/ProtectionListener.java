@@ -18,6 +18,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -86,7 +87,7 @@ public class ProtectionListener extends BaseListener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
+    public void onPlayerSendInvalidChars(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String pattern = "[ꀀ-\uA48F]";
 
@@ -100,7 +101,8 @@ public class ProtectionListener extends BaseListener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         if (player.hasPermission("hammercore.utils.keepinventory") || player.getLocation().getY() < -64
-                || (player.getLocation().getWorld() != null && player.getLocation().getWorld().getName().equals("nether") && player.getLocation().getY() >= 127)) {
+                || (player.getLocation().getWorld() != null && player.getLocation().getWorld().getName().equals("nether")
+                && player.getLocation().getY() >= 127)) {
             event.getDrops().clear();
             event.setDroppedExp(0);
             event.setKeepInventory(true);
@@ -136,7 +138,7 @@ public class ProtectionListener extends BaseListener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onUsingCartography(PrepareItemCraftEvent event) {
+    public void onUsingCartographyToCopyMap(PrepareItemCraftEvent event) {
         if (event.getInventory().getResult() != null && event.getInventory().getResult().getType() == Material.FILLED_MAP) {
             ItemMeta itemMeta = event.getInventory().getResult().getItemMeta();
             if (itemMeta != null) {
@@ -166,6 +168,49 @@ public class ProtectionListener extends BaseListener {
                                 if (Pattern.matches(regex, ChatColor.stripColor(lore))) {
                                     event.setCancelled(true);
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onUsingWorkbenchForArchitectureItem(InventoryClickEvent event) {
+        ItemStack itemStack = event.getCurrentItem();
+        if (event.getClickedInventory() != null) {
+            if (event.getSlotType() == InventoryType.SlotType.RESULT && itemStack != null && event.getInventory().getType() != InventoryType.MERCHANT) {
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                if (itemMeta != null) {
+                    if (itemMeta.hasLore()) {
+                        for (String lore : itemMeta.getLore()) {
+                            String regex = ".*特供建材.*";
+                            if (Pattern.matches(regex, ChatColor.stripColor(lore))) {
+                                event.setCancelled(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public final void onMovingArchitectureItemIntoAnother(InventoryClickEvent event) {
+        Inventory top = event.getView().getTopInventory();
+        Inventory bottom = event.getView().getBottomInventory();
+
+        if (top.getType() != InventoryType.PLAYER && bottom.getType() == InventoryType.PLAYER) {
+            if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR) {
+                ItemStack itemStack = event.getCurrentItem();
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                if (itemMeta != null) {
+                    if (itemMeta.hasLore()) {
+                        for (String lore : itemMeta.getLore()) {
+                            String regex = ".*特供建材.*";
+                            if (Pattern.matches(regex, ChatColor.stripColor(lore))) {
+                                event.setCancelled(true);
                             }
                         }
                     }

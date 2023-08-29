@@ -1,4 +1,4 @@
-package ink.ziip.hammer.hammercore.listener.packetlistener;
+package ink.ziip.hammer.hammercore.listener;
 
 import ink.ziip.hammer.hammercore.api.listener.BaseListener;
 import org.bukkit.entity.Entity;
@@ -9,7 +9,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 public class SnowballListener extends BaseListener {
 
     @EventHandler
-    public void onAttackedBySnowball(ProjectileHitEvent event) {
+    public void onAttackedBySnowballByAncientHorn(ProjectileHitEvent event) {
         if (event.getEntity().hasMetadata("hammercore")) {
             Entity entity = event.getHitEntity();
             if (entity != null) {

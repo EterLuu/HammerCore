@@ -4,7 +4,7 @@ import ink.ziip.hammer.hammercore.HammerCore;
 import ink.ziip.hammer.hammercore.api.listener.BaseListener;
 import ink.ziip.hammer.hammercore.api.manager.BaseManager;
 import ink.ziip.hammer.hammercore.listener.*;
-import ink.ziip.hammer.hammercore.listener.packetlistener.SnowballListener;
+import ink.ziip.hammer.hammercore.listener.SnowballListener;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 
@@ -12,7 +12,7 @@ public class ListenerManager extends BaseManager {
 
     private final BaseListener bossBarTaskListener;
     private final BaseListener mineCartAcceleratorListener;
-    private final BaseListener ProtectionListener;
+    private final BaseListener protectionListener;
     private final BaseListener breweryListener;
     private final BaseListener peelingRecoveryListener;
     private final BaseListener quickActionListener;
@@ -21,8 +21,8 @@ public class ListenerManager extends BaseManager {
 
     public ListenerManager() {
         bossBarTaskListener = new BossBarTaskListener();
-        mineCartAcceleratorListener = new MineCartAcceleratorListener();
-        ProtectionListener = new ProtectionListener();
+        mineCartAcceleratorListener = new MineCartListener();
+        protectionListener = new ProtectionListener();
         breweryListener = new BreweryListener();
         peelingRecoveryListener = new PeelingRecoveryListener();
         quickActionListener = new QuickActionListener();
@@ -36,7 +36,7 @@ public class ListenerManager extends BaseManager {
         joinQuitListener.register();
         bossBarTaskListener.register();
         mineCartAcceleratorListener.register();
-        ProtectionListener.register();
+        protectionListener.register();
 
         if (Bukkit.getPluginManager().getPlugin("Brewery") != null
                 && Bukkit.getPluginManager().getPlugin("ProjectKorra") != null) {

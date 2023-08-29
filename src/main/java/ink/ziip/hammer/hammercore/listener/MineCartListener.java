@@ -1,6 +1,7 @@
 package ink.ziip.hammer.hammercore.listener;
 
 import ink.ziip.hammer.hammercore.api.listener.BaseListener;
+import ink.ziip.hammer.hammercore.api.object.user.HammerUser;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
@@ -14,16 +15,19 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
-public class MineCartAcceleratorListener extends BaseListener {
+public class MineCartListener extends BaseListener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onVehicleLeave(EntityDismountEvent event) {
         Entity dismounted = event.getDismounted();
         Entity entity = event.getEntity();
         if (entity instanceof Player && dismounted instanceof Minecart minecart && minecart.getPassengers().size() == 1) {
-            minecart.remove();
-            entity.teleport(entity.getLocation().add(0, 1, 0));
-            entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.MINECART));
+            HammerUser hammerUser = HammerUser.getUser(entity);
+            if (hammerUser.isRemoveMineCartOnLeaving()) {
+                minecart.remove();
+                entity.teleport(entity.getLocation().add(0, 1, 0));
+                entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.MINECART));
+            }
         }
     }
 

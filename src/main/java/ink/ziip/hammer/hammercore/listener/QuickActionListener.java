@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class QuickActionListener extends BaseListener {
 
     @EventHandler
-    public void onPlayerSwapItem(PlayerSwapHandItemsEvent event) {
+    public void onPlayerSwapItemToOpenMenu(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
         if (player.isSneaking()) {
             event.setCancelled(true);
@@ -33,7 +33,7 @@ public class QuickActionListener extends BaseListener {
     }
 
     @EventHandler
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
+    public void onPlayerDropItemToToggleBend(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         if (player.isSneaking()) {
             event.setCancelled(true);
@@ -87,7 +87,7 @@ public class QuickActionListener extends BaseListener {
     }
 
     @EventHandler
-    public void onPlayerInteractItemFrame(PlayerInteractEntityEvent event) {
+    public void onPlayerInteractItemFrameToTeleport(PlayerInteractEntityEvent event) {
         if (event.getRightClicked() instanceof ItemFrame itemFrame) {
             Player player = event.getPlayer();
             if (player.isSneaking()) {
