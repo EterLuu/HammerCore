@@ -4,9 +4,8 @@ import ink.ziip.hammer.hammercore.api.listener.BaseListener;
 import ink.ziip.hammer.hammercore.api.util.Utils;
 import ink.ziip.hammer.hammercore.manager.ConfigManager;
 import ink.ziip.hammer.hammercore.manager.MessageManager;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.World;
+import ink.ziip.hammer.hammercore.tasks.MaintenanceTask;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -17,12 +16,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
+
+import static ink.ziip.hammer.hammercore.manager.ConfigManager.UTIL_DISABLE_ELYTRA;
 
 public class ProtectionListener extends BaseListener {
 
@@ -197,12 +200,17 @@ public class ProtectionListener extends BaseListener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public final void onMovingArchitectureItemIntoAnother(InventoryClickEvent event) {
+    public void onMovingArchitectureItemIntoAnother(InventoryClickEvent event) {
         Inventory top = event.getView().getTopInventory();
         Inventory bottom = event.getView().getBottomInventory();
 
-        if (top.getType() != InventoryType.PLAYER && bottom.getType() == InventoryType.PLAYER) {
-            if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR) {
+        if (top.getType() != InventoryType.MERCHANT && bottom.getType() == InventoryType.PLAYER && !event.getWhoClicked().isOp()) {
+            if (top.getType() == InventoryType.CRAFTING) {
+                if (top.getSize() == 5) {
+                    return;
+                }
+            }
+            if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR && !Objects.equals(event.getClickedInventory(), top)) {
                 ItemStack itemStack = event.getCurrentItem();
                 ItemMeta itemMeta = itemStack.getItemMeta();
                 if (itemMeta != null) {
@@ -216,6 +224,25 @@ public class ProtectionListener extends BaseListener {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerJoinOnMaintenanceTime(AsyncPlayerPreLoginEvent event) {
+        if (MaintenanceTask.isWhitelist()) {
+            for (OfflinePlayer offlinePlayer : Bukkit.getServer().getWhitelistedPlayers()) {
+                if (offlinePlayer.getName() != null && offlinePlayer.getName().equals(event.getName())) {
+                    return;
+                }
+            }
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "服务器维护中。（01:00 - 06:00）");
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void OnElytraFly(EntityToggleGlideEvent event) {
+        if (UTIL_DISABLE_ELYTRA && event.getEntity() instanceof Player) {
+            event.setCancelled(true);
         }
     }
 }
