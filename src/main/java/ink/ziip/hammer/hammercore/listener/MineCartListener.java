@@ -4,7 +4,6 @@ import ink.ziip.hammer.hammercore.api.listener.BaseListener;
 import ink.ziip.hammer.hammercore.api.object.user.HammerUser;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.data.Rail;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
@@ -51,11 +50,15 @@ public class MineCartListener extends BaseListener {
             for (Entity entity : event.getVehicle().getPassengers()) {
                 if (entity instanceof Player) {
                     Location frontLocation1 = event.getFrom().add(cart.getFacing().getDirection().multiply(1));
-                    Location frontLocation2 = event.getFrom().add(cart.getFacing().getDirection().multiply(3));
-                    Location frontLocation3 = event.getFrom().add(cart.getFacing().getDirection().multiply(5));
-                    if (frontLocation1.getBlock().getBlockData() instanceof Rail &&
-                            frontLocation2.getBlock().getBlockData() instanceof Rail &&
-                            frontLocation3.getBlock().getBlockData() instanceof Rail &&
+                    Location frontLocation2 = event.getFrom().add(cart.getFacing().getDirection().multiply(2));
+                    Location frontLocation3 = event.getFrom().add(cart.getFacing().getDirection().multiply(3));
+                    Location frontLocation4 = event.getFrom().add(cart.getFacing().getDirection().multiply(4));
+                    Location frontLocation5 = event.getFrom().add(cart.getFacing().getDirection().multiply(5));
+                    if (frontLocation1.getBlock().getType() == Material.POWERED_RAIL &&
+                            frontLocation2.getBlock().getType() == Material.POWERED_RAIL &&
+                            frontLocation3.getBlock().getType() == Material.POWERED_RAIL &&
+                            frontLocation4.getBlock().getType() == Material.POWERED_RAIL &&
+                            frontLocation5.getBlock().getType() == Material.POWERED_RAIL &&
                             cart.getLocation().getBlock().getType() != Material.RAIL &&
                             event.getFrom().getBlock().getType() != Material.RAIL &&
                             event.getTo().getBlock().getType() != Material.RAIL
