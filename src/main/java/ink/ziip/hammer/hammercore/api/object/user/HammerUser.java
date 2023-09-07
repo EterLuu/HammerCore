@@ -47,9 +47,14 @@ public class HammerUser {
     private FloodgateApi floodgateApi = FloodgateApi.getInstance();
     private int magicStickUsingTimes = 0;
     private Long magicStickPendingTime = 0L;
+
     @Getter
     @Setter
     private boolean removeMineCartOnLeaving = true;
+
+    @Getter
+    @Setter
+    private Long dropItemsTime = 0L;
 
     public boolean canUseMagicStick() {
         return System.currentTimeMillis() - magicStickPendingTime > 120000;

@@ -41,6 +41,7 @@ public class ConfigManager extends BaseManager {
     public static Boolean UTIL_DISABLE_QUIT_MESSAGE;
     public static Boolean UTIL_AUTO_RESPAWN_ENABLED;
     public static Location UTIL_AUTO_RESPAWN_LOCATION;
+    public static Boolean UTIL_DISABLE_ELYTRA;
 
     public static Boolean PROJECTKORRA_ALL_EARTH_BINDER;
 
@@ -102,6 +103,7 @@ public class ConfigManager extends BaseManager {
         UTIL_DISABLE_JOIN_MESSAGE = config.getBoolean("util.disable-join-message", true);
         UTIL_DISABLE_QUIT_MESSAGE = config.getBoolean("util.disable-quit-message", true);
         UTIL_AUTO_RESPAWN_ENABLED = config.getBoolean("util.auto-respawn.enabled", true);
+        UTIL_DISABLE_ELYTRA = config.getBoolean("util.disable-elytra", false);
 
         World world = Bukkit.getWorld(Objects.requireNonNull(config.getString("util.auto-respawn.location.world")));
         double x, y, z;

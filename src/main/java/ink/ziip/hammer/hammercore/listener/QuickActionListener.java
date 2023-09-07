@@ -2,20 +2,24 @@ package ink.ziip.hammer.hammercore.listener;
 
 import ink.ziip.hammer.hammercore.HammerCore;
 import ink.ziip.hammer.hammercore.api.listener.BaseListener;
+import ink.ziip.hammer.hammercore.api.object.user.HammerUser;
+import ink.ziip.hammer.hammercore.api.util.Utils;
 import ink.ziip.hammer.hammercore.manager.ConfigManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.BoundingBox;
 
 import java.util.regex.Pattern;
+
+import static ink.ziip.hammer.hammercore.manager.ConfigManager.UTIL_DISABLE_ELYTRA;
 
 public class QuickActionListener extends BaseListener {
 
@@ -105,6 +109,48 @@ public class QuickActionListener extends BaseListener {
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerBreakBlockToVoid(BlockBreakEvent event) {
+        if (!UTIL_DISABLE_ELYTRA) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        Location location = player.getLocation().add(0, -3, 0);
+        World world = location.getWorld();
+        if (world != null) {
+            if (player.getLocation().getY() >= event.getBlock().getLocation().getY()) {
+                if (world.getBlockAt(location).getType() == Material.AIR) {
+                    player.sendMessage(Utils.translateColorCodes("&7[&c&l!&7] &6你脚下的方块下面是空气！"));
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDropItemsInSpawn(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        Location location = player.getLocation();
+        HammerUser hammerUser = HammerUser.getUser(player);
+
+        BoundingBox boundingBox = new BoundingBox(56, 22, 120, 103, 82, 217);
+        if (boundingBox.contains(location.getX(), location.getY(), location.getZ()) && location.getWorld() != null && location.getWorld().getName().equals("world")) {
+            if (System.currentTimeMillis() - hammerUser.getDropItemsTime() > 120000) {
+                hammerUser.setDropItemsTime(System.currentTimeMillis());
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    onlinePlayer.sendMessage(Utils.translateColorCodes("&d[拉菲] &7嗷呜～ " + player.getName() + " 在主城乱丢垃圾，拉菲将在 1分钟 后把垃圾吃掉！"));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (event.getItemDrop().isValid())
+                                event.getItemDrop().remove();
+                        }
+                    }.runTaskLater(HammerCore.getInstance(), 1200);
                 }
             }
         }
