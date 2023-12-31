@@ -6,12 +6,15 @@ import ink.ziip.hammer.hammercore.api.listener.BaseListener;
 import ink.ziip.hammer.hammercore.api.object.user.HammerUser;
 import ink.ziip.hammer.hammercore.manager.MessageManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.regex.Pattern;
 
 public class BreweryListener extends BaseListener {
 
@@ -27,6 +30,19 @@ public class BreweryListener extends BaseListener {
             Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "bend remove " + player.getName());
             Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "warp 元素祭坛 " + player.getName());
             Bukkit.broadcastMessage(hammerUser.setPlaceholders(MessageManager.MENG_PO_SOUP_TIPS));
+            return;
+        }
+
+        if (event.getBrew().getCurrentRecipe().getName(event.getBrew().getQuality()).equals("红酒")) {
+            if (event.getItemMeta().hasLore()) {
+                for (String lore : event.getItemMeta().getLore()) {
+                    String regex = ".*XL木桶熟成.*";
+                    if (Pattern.matches(regex, ChatColor.stripColor(lore))) {
+                        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "si give 23中秋巡礼-风滚草镇 1 " + player.getName());
+                        return;
+                    }
+                }
+            }
         }
     }
 
