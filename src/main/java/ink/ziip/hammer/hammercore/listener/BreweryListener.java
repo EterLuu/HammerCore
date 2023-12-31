@@ -2,6 +2,7 @@ package ink.ziip.hammer.hammercore.listener;
 
 import com.dre.brewery.api.BreweryApi;
 import com.dre.brewery.api.events.brew.BrewDrinkEvent;
+import com.dre.brewery.recipe.BRecipe;
 import ink.ziip.hammer.hammercore.api.listener.BaseListener;
 import ink.ziip.hammer.hammercore.api.object.user.HammerUser;
 import ink.ziip.hammer.hammercore.manager.MessageManager;
@@ -25,15 +26,19 @@ public class BreweryListener extends BaseListener {
             return;
         HammerUser hammerUser = HammerUser.getUser(player);
         hammerUser.sendMessage(MessageManager.DRINKING_ALCOHOL_IS_BAD_FOR_YOUR_HEALTH);
+        BRecipe bRecipe = event.getBrew().getCurrentRecipe();
 
-        if (event.getBrew().getCurrentRecipe().getName(event.getBrew().getQuality()).equals("优质孟婆汤")) {
+        if (bRecipe == null)
+            return;
+
+        if (bRecipe.getName(event.getBrew().getQuality()).equals("优质孟婆汤")) {
             Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "bend remove " + player.getName());
             Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "warp 元素祭坛 " + player.getName());
             Bukkit.broadcastMessage(hammerUser.setPlaceholders(MessageManager.MENG_PO_SOUP_TIPS));
             return;
         }
 
-        if (event.getBrew().getCurrentRecipe().getName(event.getBrew().getQuality()).equals("红酒")) {
+        if (bRecipe.getName(event.getBrew().getQuality()).equals("红酒")) {
             if (event.getItemMeta().hasLore()) {
                 for (String lore : event.getItemMeta().getLore()) {
                     String regex = ".*XL木桶熟成.*";
