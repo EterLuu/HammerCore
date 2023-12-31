@@ -169,7 +169,7 @@ public class HammerUser {
         } else {
             packetContainer.getBooleans().write(0, true);
         }
-        packetContainer.getStrings().write(0, wrappedChatComponent.getJson());
+        packetContainer.getChatComponents().write(0, wrappedChatComponent);
         if (filtered) {
             packetContainer.setMeta("signed", true);
         }
