@@ -161,8 +161,29 @@ public class ProtectionListener extends BaseListener {
     public void onUsingWorkbenchToCopyMap(InventoryClickEvent event) {
         ItemStack itemStack = event.getCurrentItem();
         if (event.getClickedInventory() != null) {
-            if (event.getSlotType() == InventoryType.SlotType.RESULT && itemStack != null && event.getClickedInventory().getType() == InventoryType.CARTOGRAPHY) {
+            if (event.getSlotType() == InventoryType.SlotType.RESULT && itemStack != null && event.getClickedInventory().getType() == InventoryType.WORKBENCH) {
                 if (itemStack.getType() == Material.FILLED_MAP) {
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    if (itemMeta != null) {
+                        if (itemMeta.hasLore()) {
+                            for (String lore : itemMeta.getLore()) {
+                                String regex = "\\[[0-9]{4}-[0-9]{2}]";
+                                if (Pattern.matches(regex, ChatColor.stripColor(lore))) {
+                                    event.setCancelled(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onUsingWorkbenchForCustomItems(InventoryClickEvent event) {
+        if (event.getClickedInventory() != null) {
+            if (event.getClickedInventory().getType() == InventoryType.WORKBENCH) {
+                for (ItemStack itemStack : event.getClickedInventory().getContents()) {
                     ItemMeta itemMeta = itemStack.getItemMeta();
                     if (itemMeta != null) {
                         if (itemMeta.hasLore()) {
