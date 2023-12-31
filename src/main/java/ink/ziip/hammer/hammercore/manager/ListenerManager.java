@@ -18,6 +18,7 @@ public class ListenerManager extends BaseManager {
     private final BaseListener quickActionListener;
     private final BaseListener joinQuitListener;
     private final BaseListener snowBallListener;
+    private final BaseListener portalListener;
 
     public ListenerManager() {
         bossBarTaskListener = new BossBarTaskListener();
@@ -28,6 +29,7 @@ public class ListenerManager extends BaseManager {
         quickActionListener = new QuickActionListener();
         joinQuitListener = new JoinQuitListener();
         snowBallListener = new SnowballListener();
+        portalListener = new PortalListener();
     }
 
     @Override
@@ -37,6 +39,9 @@ public class ListenerManager extends BaseManager {
         bossBarTaskListener.register();
         mineCartAcceleratorListener.register();
         protectionListener.register();
+        if(ConfigManager.UTIL_RESTRICT_PORTAL_RANGE){
+            portalListener.register();
+        }
 
         if (Bukkit.getPluginManager().getPlugin("Brewery") != null
                 && Bukkit.getPluginManager().getPlugin("ProjectKorra") != null) {

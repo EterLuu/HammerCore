@@ -106,6 +106,7 @@ util:
       z: 632.5
       yaw: 90
       pitch: -3
+  restrict-portal-range: false
 
 projectkorra:
   all-earth-binder: false
