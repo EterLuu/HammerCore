@@ -75,9 +75,15 @@ public class Utils {
         return map;
     }
 
-    public List<Object> getRandomPotionEffect(){
+    public List<Object> getRandomPotionEffect() {
         Random random = new Random();
         int num = random.nextInt(0, badEffects.length);
         return Arrays.asList(badEffects[num], badEffectsTranslation[num]);
+    }
+
+    public static boolean isTeleportationItem(String lore) {
+        String regex = "\\[[0-9]{3}-.*]";
+        lore = ChatColor.stripColor(lore);
+        return Pattern.matches(regex, lore);
     }
 }

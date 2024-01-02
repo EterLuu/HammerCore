@@ -9,6 +9,7 @@ import org.bukkit.*;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -90,7 +91,7 @@ public class QuickActionListener extends BaseListener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteractItemFrameToTeleport(PlayerInteractEntityEvent event) {
         if (event.getRightClicked() instanceof ItemFrame itemFrame) {
             Player player = event.getPlayer();
@@ -99,9 +100,8 @@ public class QuickActionListener extends BaseListener {
                 if (itemMeta != null) {
                     if (itemMeta.hasLore()) {
                         for (String lore : itemMeta.getLore()) {
-                            String regex = "\\[[0-9]{3}-.*]";
-                            lore = ChatColor.stripColor(lore);
-                            if (Pattern.matches(regex, lore)) {
+                            if (Utils.isTeleportationItem(lore)) {
+                                lore = ChatColor.stripColor(lore);
                                 String warp = lore.replaceAll("\\[[0-9]{3}-", "");
                                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "huskhomes:warp " + warp.replaceAll("]", "") + " " + player.getName());
                                 event.setCancelled(true);
