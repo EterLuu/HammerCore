@@ -19,6 +19,7 @@ public class ListenerManager extends BaseManager {
     private final BaseListener joinQuitListener;
     private final BaseListener snowBallListener;
     private final BaseListener portalListener;
+    private final BaseListener itemFrameLockListener;
 
     public ListenerManager() {
         bossBarTaskListener = new BossBarTaskListener();
@@ -30,6 +31,7 @@ public class ListenerManager extends BaseManager {
         joinQuitListener = new JoinQuitListener();
         snowBallListener = new SnowballListener();
         portalListener = new PortalListener();
+        itemFrameLockListener = new ItemFrameLockListener();
     }
 
     @Override
@@ -39,7 +41,7 @@ public class ListenerManager extends BaseManager {
         bossBarTaskListener.register();
         mineCartAcceleratorListener.register();
         protectionListener.register();
-        if(ConfigManager.UTIL_RESTRICT_PORTAL_RANGE){
+        if (ConfigManager.UTIL_RESTRICT_PORTAL_RANGE) {
             portalListener.register();
         }
 
@@ -64,6 +66,7 @@ public class ListenerManager extends BaseManager {
 
         quickActionListener.register();
         snowBallListener.register();
+        itemFrameLockListener.register();
 
     }
 
