@@ -59,11 +59,12 @@ public class MineCartListener extends BaseListener {
                             frontLocation3.getBlock().getType() == Material.POWERED_RAIL &&
                             frontLocation4.getBlock().getType() == Material.POWERED_RAIL &&
                             frontLocation5.getBlock().getType() == Material.POWERED_RAIL &&
+                            frontLocation1.getBlock().getType() != Material.RAIL &&
                             cart.getLocation().getBlock().getType() != Material.RAIL &&
                             event.getFrom().getBlock().getType() != Material.RAIL &&
                             event.getTo().getBlock().getType() != Material.RAIL
                     ) {
-                        cart.setMaxSpeed(1.6);
+                        cart.setMaxSpeed(2.4);
                     } else {
                         if (cart.getVelocity().length() > 2) {
                             cart.setVelocity(cart.getVelocity().multiply(2 / cart.getVelocity().length()));
