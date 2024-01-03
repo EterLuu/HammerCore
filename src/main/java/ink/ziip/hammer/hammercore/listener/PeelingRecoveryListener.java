@@ -22,7 +22,7 @@ public class PeelingRecoveryListener extends BaseListener {
         String name = block.getType().name();
         Location location = block.getLocation();
 
-        if (name.endsWith("_WOOD") || name.endsWith("_LOG")) {
+        if (name.endsWith("_WOOD") || name.endsWith("_LOG") || name.equals("BAMBOO_BLOCK")) {
             WoodLocation.addWood(WoodLocation.builder()
                     .x(location.getX())
                     .y(location.getY())
@@ -63,7 +63,7 @@ public class PeelingRecoveryListener extends BaseListener {
             String name = block.getType().name();
             Location location = block.getLocation();
 
-            if (!event.hasItem() && (name.endsWith("_WOOD") || (name.endsWith("_LOG")))) {
+            if (!event.hasItem() && (name.endsWith("_WOOD") || name.endsWith("_LOG") || name.equals("BAMBOO_BLOCK"))) {
 
                 WoodLocation woodLocation = WoodLocation.builder()
                         .x(location.getX())
