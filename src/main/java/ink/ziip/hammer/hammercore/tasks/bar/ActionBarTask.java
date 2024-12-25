@@ -28,7 +28,7 @@ public class ActionBarTask extends BaseTask {
                     HammerUser hammerUser = HammerUser.getUser(player);
                     if (!hammerUser.isBedrockPlayer()) {
                         if (System.currentTimeMillis() - hammerUser.getActionBarSendingTime() > 1000) {
-                            hammerUser.sendActionBar("%pkaddons_actionbar%", true);
+                            hammerUser.sendActionBar("\uE120\uE11E\uE116&f%pkaddons_actionbar% \uE121%rs_temperaturecolor%[ %rs_temperature% ]", true);
                         }
                     }
                 }

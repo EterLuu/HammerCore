@@ -67,7 +67,12 @@ public class ListenerManager extends BaseManager {
         quickActionListener.register();
         snowBallListener.register();
         itemFrameLockListener.register();
-
+        if (Bukkit.getPluginManager().getPlugin("RealisticSeasons") != null) {
+            if (Bukkit.getPluginManager().getPlugin("Seasons") != null) {
+                SeasonListener seasonListener = new SeasonListener();
+                seasonListener.register();
+            }
+        }
     }
 
     @Override
