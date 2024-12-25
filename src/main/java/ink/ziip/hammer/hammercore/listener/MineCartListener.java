@@ -5,6 +5,7 @@ import ink.ziip.hammer.hammercore.api.object.user.HammerUser;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,7 +49,7 @@ public class MineCartListener extends BaseListener {
         if (event.getVehicle() instanceof Minecart cart && !event.getVehicle().isEmpty()) {
 
             for (Entity entity : event.getVehicle().getPassengers()) {
-                if (entity instanceof Player) {
+                if (entity instanceof LivingEntity) {
                     Location frontLocation1 = event.getFrom().add(cart.getFacing().getDirection().multiply(1));
                     Location frontLocation2 = event.getFrom().add(cart.getFacing().getDirection().multiply(2));
                     Location frontLocation3 = event.getFrom().add(cart.getFacing().getDirection().multiply(3));
