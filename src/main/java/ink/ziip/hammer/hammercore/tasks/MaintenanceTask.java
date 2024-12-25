@@ -34,7 +34,8 @@ public class MaintenanceTask extends BaseTask {
             ) {
                 if (!whitelist) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        player.kickPlayer(Utils.translateColorCodes("&7[&c&l!&7] &4服务器维护。（01:00~06:00）"));
+                        if (!player.isOp())
+                            player.kickPlayer(Utils.translateColorCodes("&7[&c&l!&7] &4服务器维护。（01:00~06:00）"));
                     }
                     whitelist = true;
                 }
