@@ -12,13 +12,13 @@ public class TaskManager extends BaseManager {
     private final BaseTask actionBarTask;
     private final BaseTask bossBarTask;
     private final BaseTask dataCleanerTask;
-    private final BaseTask maintenanceTask;
+//    private final BaseTask maintenanceTask;
 
     public TaskManager() {
         actionBarTask = ActionBarTask.getInstance();
         bossBarTask = BossBarTask.getInstance();
         dataCleanerTask = DataCleanerTask.getInstance();
-        maintenanceTask = MaintenanceTask.getInstance();
+//        maintenanceTask = MaintenanceTask.getInstance();
     }
 
     @Override
@@ -26,7 +26,7 @@ public class TaskManager extends BaseManager {
         actionBarTask.start();
         bossBarTask.start();
         dataCleanerTask.start();
-        maintenanceTask.start();
+//        maintenanceTask.start();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class TaskManager extends BaseManager {
         actionBarTask.stop();
         bossBarTask.stop();
         dataCleanerTask.stop();
-        maintenanceTask.stop();
+//        maintenanceTask.stop();
     }
 
     @Override
