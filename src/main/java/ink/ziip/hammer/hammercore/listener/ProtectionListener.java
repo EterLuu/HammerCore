@@ -4,7 +4,6 @@ import ink.ziip.hammer.hammercore.api.listener.BaseListener;
 import ink.ziip.hammer.hammercore.api.util.Utils;
 import ink.ziip.hammer.hammercore.manager.ConfigManager;
 import ink.ziip.hammer.hammercore.manager.MessageManager;
-import ink.ziip.hammer.hammercore.tasks.MaintenanceTask;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -16,7 +15,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -245,18 +243,6 @@ public class ProtectionListener extends BaseListener {
                     }
                 }
             }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerJoinOnMaintenanceTime(AsyncPlayerPreLoginEvent event) {
-        if (MaintenanceTask.isWhitelist()) {
-            for (OfflinePlayer offlinePlayer : Bukkit.getServer().getWhitelistedPlayers()) {
-                if (offlinePlayer.getName() != null && offlinePlayer.getName().equals(event.getName())) {
-                    return;
-                }
-            }
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "服务器维护中。（01:00 - 06:00）");
         }
     }
 
