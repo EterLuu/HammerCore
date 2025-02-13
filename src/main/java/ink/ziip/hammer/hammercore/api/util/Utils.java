@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 public class Utils {
 
     private static final PotionEffectType[] badEffects = new PotionEffectType[]{
-            PotionEffectType.SLOW,
+            PotionEffectType.SLOWNESS,
             PotionEffectType.WITHER,
             PotionEffectType.WEAKNESS,
             PotionEffectType.BLINDNESS,
